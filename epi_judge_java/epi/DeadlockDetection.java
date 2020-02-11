@@ -29,7 +29,7 @@ public class DeadlockDetection {
       if (hasCycle(vertex, graph, map))
         return true;
     }
-    return true;
+    return false;
   }
   
   // DFS recursion
@@ -42,6 +42,12 @@ public class DeadlockDetection {
       return true;
     else
       map.put(vertex, Color.GRAY);
+    
+    for (GraphVertex v : vertex.edges) {
+      if (hasCycle(v, graph, map))
+        return true;
+    }
+    map.put(vertex, Color.BLACK);
       
     return false;
   }

@@ -2532,7 +2532,7 @@ problem_mapping = {
                 "total": 85
             },
             "Java: IsCircuitWirable.java": {
-                "passed": 0,
+                "passed": 85,
                 "total": 85
             },
             "Python: is_circuit_wirable.py": {
@@ -2546,7 +2546,7 @@ problem_mapping = {
                 "total": 48
             },
             "Java: StringTransformability.java": {
-                "passed": 0,
+                "passed": 48,
                 "total": 48
             },
             "Python: string_transformability.py": {

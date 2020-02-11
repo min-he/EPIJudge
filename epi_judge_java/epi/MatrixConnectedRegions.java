@@ -5,9 +5,48 @@ import epi.test_framework.TimedExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.ArrayDeque;
+
+class Coordinate {
+  int x;
+  int y;
+
+  public Coordinate(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 public class MatrixConnectedRegions {
   public static void flipColor(int x, int y, List<List<Boolean>> image) {
-    // TODO - you fill in here.
+    // check if x, y is within image
+    if (!(0 <= x && x < image.size()
+          && 0 <= y && y < image.get(0).size()))
+      return;
+
+    // BFS
+    Queue<MyCoordinate> queue = new ArrayDeque<MyCoordinate>();
+    queue.add(new MyCoordinate(x, y));
+    final boolean color = image.get(x).get(y);
+
+    while (!queue.isEmpty()) {
+      MyCoordinate curr = queue.remove();
+      image.get(x).set(y, !color);
+
+      for (MyCoordinate nextMove : List.of(
+        new MyCoordinate(curr.x - 1, y),
+        new MyCoordinate(curr.x + 1, y),
+        new MyCoordinate(curr.x, y - 1),
+        new MyCoordinate(curr.x, y + 1)
+      )) {
+        if (0 <= nextMove.x && nextMove.x < image.size()
+          && 0 <= nextMove.y && nextMove.y < image.get(0).size()
+            && image.get(nextMove.x).get(nextMove.y) == color) {
+          queue.add(nextMove);
+          }
+      }
+    }
     return;
   }
   @EpiTest(testDataFile = "painting.tsv")

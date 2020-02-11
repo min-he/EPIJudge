@@ -6,6 +6,8 @@ import epi.test_framework.TimedExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
+
 public class DeadlockDetection {
 
   public static class GraphVertex {
@@ -14,10 +16,36 @@ public class DeadlockDetection {
     public GraphVertex() { edges = new ArrayList<>(); }
   }
 
+  enum Color {
+    WHITE, GRAY, BLACK
+  };
+  
   public static boolean isDeadlocked(List<GraphVertex> graph) {
-    // TODO - you fill in here.
+    if (graph == null)
+      return false;
+
+    Map<GraphVertex, Color> map = new HashMap<GraphVertex, Color>();
+    for (GraphVertex vertex : graph) {
+      if (hasCycle(vertex, graph, map))
+        return true;
+    }
     return true;
   }
+  
+  // DFS recursion
+  static boolean hasCycle(GraphVertex vertex, List<GraphVertex> graph, Map<GraphVertex, Color> map) {
+    map.putIfAbsent(vertex, Color.WHITE);
+    Color color = map.get(vertex);
+    if (color == Color.BLACK)
+      return false;
+    else if (color == Color.GRAY)
+      return true;
+    else
+      map.put(vertex, Color.GRAY);
+      
+    return false;
+  }
+
   @EpiUserType(ctorParams = {int.class, int.class})
   public static class Edge {
     public int from;

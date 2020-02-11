@@ -39,13 +39,53 @@ public class SearchMaze {
   public enum Color { WHITE, BLACK }
 
   public static List<Coordinate> searchMaze(List<List<Color>> maze,
-                                            Coordinate s, Coordinate e) {
-    // TODO - you fill in here.
-    return Collections.emptyList();
+      Coordinate s, Coordinate e) {
+    // check if both s, e are within maze
+    if (!isFeasibleMove(maze, s) || !isFeasibleMove(maze, e)) return Collections.emptyList();
+
+    // DFS from s -> e
+    List<Coordinate> path = new ArrayList<Coordinate>();
+    helperDFS(maze, s, e, path);
+
+    return path;
   }
+  
+  static boolean helperDFS(List<List<Color>> maze, Coordinate curr, Coordinate e, List<Coordinate> path) {
+    if (!isFeasibleMove(maze, curr))
+      return false;
+
+    path.add(curr);
+    // set current node as visited
+    maze.get(curr.x).set(curr.y, Color.BLACK);
+
+    if (curr.equals(e))
+      return true;
+    
+    // recursion on neighbors
+    for (Coordinate nextMove : List.of(
+        new Coordinate(curr.x - 1, curr.y),
+        new Coordinate(curr.x + 1, curr.y),
+        new Coordinate(curr.x, curr.y - 1),
+        new Coordinate(curr.x, curr.y + 1))) {
+
+      if (helperDFS(maze, nextMove, e, path))
+        return true;
+    }
+    path.remove(curr);
+    return false;
+  }
+
+  static boolean isFeasibleMove(List<List<Color>> maze, Coordinate curr) {
+    if (!(0 <= curr.x && curr.x < maze.size() 
+        && 0 <= curr.y && curr.y < maze.get(0).size() 
+        && maze.get(curr.x).get(curr.y) == Color.WHITE))
+      return false;
+    else
+      return true;
+  }
+
   public static boolean pathElementIsFeasible(List<List<Integer>> maze,
-                                              Coordinate prev, Coordinate cur) {
-    if (!(0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&
+      Coordinate prev, Coordinate cur) { if (!(0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&
           cur.y < maze.get(cur.x).size() && maze.get(cur.x).get(cur.y) == 0)) {
       return false;
     }
